@@ -1,43 +1,25 @@
 pipeline {
 agent any
 
-tools {
-    // Install the Maven version configured as "M3" and add it to the path.
-    maven "MVN3"
+environment {
+    TRAINING = "devops"
+    TOPIC = "jenkins"
 }
 
 stages {
-    stage('pull scm') {
+    stage('local') {
+        environment {
+            TOPIC = "cicd"
+        }
         steps {
-            // Get some code from a GitHub repository
-            git credentialsId: 'github', url: 'git@github.com:eakhtar1999/jenkins_test.git'
-	}
-}
-
-stage('build') {
-	steps {
-            // Run Maven on a Unix agent.
-            sh "mvn -Dmaven.test.failure.ignore=true -f api-gateway clean package"
-
-            // To run Maven on a Windows agent, use
-            // bat "mvn -Dmaven.test.failure.ignore=true clean package"
-         }
-}
-
-stage('Publish') {
-        steps {
-                junit stdioRetention: '', testResults: 'api-gateway/target/surefire-reports/*.xml'
-                archiveArtifacts 'api-gateway/target/*.jar'
-       }
+            sh " echo training is ${TRAINING} and topic is ${TOPIC}"
+        }
     }
-
-stage('print') {
-	agent {
-    		label 'linux'
-	 }
-	steps {
-		sh "echo testing"
-	}
-}
+    
+    stage('global') {
+        steps {
+            sh " echo training is ${TRAINING} and topic is ${TOPIC}"
+        }
+    }
 }
 }
