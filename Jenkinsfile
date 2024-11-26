@@ -10,7 +10,7 @@ stages {
     stage('pull scm') {
         steps {
             // Get some code from a GitHub repository
-            git credentialsId: 'github', url: 'git@github.com:{your repo}/jenkins_test.git'
+            git credentialsId: 'github', url: 'git@github.com:eakhtar1999/jenkins_test.git'
 	}
 }
 
